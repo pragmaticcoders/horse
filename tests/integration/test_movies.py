@@ -3,7 +3,7 @@ from flask import json
 
 def test_creating_movie(client):
     response = client.post('/movies', data=json.dumps({
-        'name': 'Home Alone',
+        'title': 'Home Alone',
     }), content_type='application/json')
     assert response.status_code == 201
 
@@ -11,6 +11,6 @@ def test_creating_movie(client):
     assert response.status_code == 200
 
     movies = json.loads(response.data)['items']
-    names = [m['name'] for m in movies]
+    titles = [m['title'] for m in movies]
 
-    assert 'Home Alone' in names
+    assert 'Home Alone' in titles
