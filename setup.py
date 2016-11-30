@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
 
     install_requires=[
-
+        'flask==0.11.1'
     ],
 
     classifiers=[
