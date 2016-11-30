@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from uuid import uuid4
 
 from horse.models import User, Movie
@@ -8,7 +9,18 @@ class ObjectDoesNotExist(Exception):
         super().__init__('{}: {}'.format(model, pk))
 
 
-class InMemoryRepository:
+class Repository(metaclass=ABCMeta):
+    @abstractmethod
+    def get(self, pk): pass
+
+    @abstractmethod
+    def store(self, obj): pass
+
+    @abstractmethod
+    def all(self): pass
+
+
+class InMemoryRepository(Repository):
     def __init__(self):
         self.objects = []
 
