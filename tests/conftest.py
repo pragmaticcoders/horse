@@ -30,4 +30,4 @@ def followed_user():
 
 @pytest.fixture
 def movie():
-    return Movie('Home alone')
+    return Movie(str(uuid4()), 'Home alone')
