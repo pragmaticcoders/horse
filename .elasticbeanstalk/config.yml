@@ -1,0 +1,15 @@
+branch-defaults:
+  default:
+    environment: horse-env-test
+    group_suffix: null
+  master:
+    environment: horse-env
+global:
+  application_name: horse-app
+  branch: null
+  default_ec2_keyname: horse-test
+  default_platform: Python 3.4
+  default_region: eu-west-1
+  profile: null
+  repository: null
+  sc: git
