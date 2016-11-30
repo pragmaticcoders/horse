@@ -27,7 +27,7 @@ class User(Resource):
     def get(self, user_pk):
         user = get_user_by_pk(user_pk)
         return jsonify({
-            'following': [
+            'followed_users': [
                 jsonify_user(u) for u in user.get_followed_users()
             ],
             'liked_movies': [
