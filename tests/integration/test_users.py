@@ -1,6 +1,7 @@
 from flask import json
 
 from horse.users import users
+from horse.models import User
 
 
 def test_user_registration(client):
@@ -19,11 +20,10 @@ def test_user_registration(client):
 
 
 def test_user_can_follow_another_user(client):
-    users.extend([{
-        'id': '1', 'name': 'Eve', 'following': [],
-    }, {
-        'id': '2', 'name': 'Adam', 'following': [],
-    }])
+    users.extend([
+        User(id='1', name='Eve'),
+        User(id='2', name='Adam'),
+    ])
 
     response = client.post('/users/1/follow', data=json.dumps({
         'id': '2',
