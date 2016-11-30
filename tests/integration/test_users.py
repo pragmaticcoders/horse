@@ -1,8 +1,6 @@
 from flask import json
 
 from horse.models import User
-from horse.web.movies import movies
-from horse.web.users import users
 
 
 def test_user_registration(client):
@@ -20,18 +18,19 @@ def test_user_registration(client):
     assert 'Kevin' in names
 
 
-def test_user_can_follow_another_user(client):
-    users.extend([
-        User(pk='1', name='Eve'),
-        User(pk='2', name='Adam'),
-    ])
+def test_user_can_follow_another_user(client, users_repo):
+    eve = User(name='Eve')
+    adam = User(name='Adam')
 
-    response = client.post('/users/1/follow', data=json.dumps({
-        'pk': '2',
+    users_repo.store(eve)
+    users_repo.store(adam)
+
+    response = client.post('/users/{}/follow'.format(eve.pk), data=json.dumps({
+        'pk': adam.pk
     }), content_type='application/json')
     assert response.status_code == 200
 
-    response = client.get('/users/1')
+    response = client.get('/users/{}'.format(eve.pk))
     assert response.status_code == 200
 
     followed_users = json.loads(response.data)['followed_users']
@@ -40,10 +39,7 @@ def test_user_can_follow_another_user(client):
     assert 'Adam' in followed_users_names
 
 
-def test_user_can_like_movie(client, movie, user):
-    movies.append(movie)
-    users.append(user)
-
+def test_user_can_like_movie(client, movie, user, users_repo, movies_repo):
     url = '/users/{user_pk}/liked_movies'.format(
         user_pk=user.pk,
     )

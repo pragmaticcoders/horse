@@ -1,6 +1,5 @@
 class User:
-    def __init__(self, pk, name, followed_users=None, liked_movies=None):
-        self.pk = pk
+    def __init__(self, name, followed_users=None, liked_movies=None):
         self.name = name
         self._followed_users = followed_users or []
         self._liked_movies = liked_movies or []
