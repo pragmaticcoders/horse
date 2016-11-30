@@ -8,15 +8,15 @@ class App:
         self.ctx = ctx
 
 
+class AppContext:
+    def __init__(self):
+        self.repos = Repositories()
+
+
 class Repositories:
     def __init__(self):
         self.users = UserRepository()
         self.movies = MovieRepository()
-
-
-class AppContext:
-    def __init__(self):
-        self.repos = Repositories()
 
 
 def build_app(**kwargs):
