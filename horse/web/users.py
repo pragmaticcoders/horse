@@ -1,10 +1,10 @@
+from uuid import uuid4
+
 from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource
-from uuid import uuid4
 
 from horse import models
 from .movies import get_movie_by_pk, jsonify_movie
-
 
 users = []
 

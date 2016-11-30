@@ -1,4 +1,4 @@
-from horse.recommendation.service import RecommendationService
+from .service import RecommendationService
 
 
 class DummyRecommendationService(RecommendationService):
