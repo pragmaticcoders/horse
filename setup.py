@@ -1,4 +1,13 @@
+import os
+
 import setuptools
+
+
+def read_requirements(filename):
+    path = os.path.join(os.path.dirname(__file__), filename)
+    with open(path) as f:
+        content = f.read()
+        return content.split('\n') if content else []
 
 
 setuptools.setup(
@@ -14,9 +23,7 @@ setuptools.setup(
 
     packages=setuptools.find_packages(),
 
-    install_requires=[
-        'flask==0.11.1'
-    ],
+    install_requires=read_requirements('requirements.txt'),
 
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',

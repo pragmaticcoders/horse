@@ -2,10 +2,10 @@ from flask import Flask
 
 
 def build_app(name=__name__):
-    application = Flask(name)
+    app = Flask(name)
 
-    @application.route('/')
+    @app.route('/')
     def hello():
         return 'Hello, world!'
 
-    return application
+    return app
