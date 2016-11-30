@@ -1,6 +1,6 @@
 from flask import Flask
 
-from horse.recommendations import recommendations_bp
+from .recommendations import recommendations_bp
 from .movies import movies_bp
 from .users import users_bp
 
