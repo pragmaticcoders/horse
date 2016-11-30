@@ -44,11 +44,12 @@ def test_user_can_like_movie(client, movie, user):
     movies.append(movie)
     users.append(user)
 
-    url = '/users/{user_pk}/movies/{movie_pk}/like'.format(
-        movie_pk=movie.pk,
+    url = '/users/{user_pk}/liked_movies'.format(
         user_pk=user.pk,
     )
-    response = client.post(url)
+    response = client.post(url, data=json.dumps({
+        'pk': movie.pk,
+    }), content_type='application/json')
     assert response.status_code == 200
 
     response = client.get('/users/{}'.format(user.pk))

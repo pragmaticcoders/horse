@@ -70,12 +70,12 @@ users_api.add_resource(UserFollow, '/users/<string:user_pk>/follow')
 
 
 class UserLikesMovie(Resource):
-    def post(self, user_pk, movie_pk):
+    def post(self, user_pk):
+        data = request.get_json()
         user = get_user_by_pk(user_pk)
-        movie = get_movie_by_pk(movie_pk)
+        movie = get_movie_by_pk(data['pk'])
+
         user.add_to_liked_movies(movie)
 
 
-users_api.add_resource(
-    UserLikesMovie,
-    '/users/<string:user_pk>/movies/<string:movie_pk>/like')
+users_api.add_resource(UserLikesMovie, '/users/<string:user_pk>/liked_movies')
