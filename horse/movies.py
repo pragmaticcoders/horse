@@ -13,7 +13,7 @@ class Movie(Resource):
     def post(self):
         data = request.get_json()
         movie = {
-            'id': str(uuid4()),
+            'pk': str(uuid4()),
             'name': data['name'],
         }
 

@@ -21,12 +21,12 @@ def test_user_registration(client):
 
 def test_user_can_follow_another_user(client):
     users.extend([
-        User(id='1', name='Eve'),
-        User(id='2', name='Adam'),
+        User(pk='1', name='Eve'),
+        User(pk='2', name='Adam'),
     ])
 
     response = client.post('/users/1/follow', data=json.dumps({
-        'id': '2',
+        'pk': '2',
     }), content_type='application/json')
     assert response.status_code == 200
 

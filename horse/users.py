@@ -11,25 +11,25 @@ users_bp = Blueprint('users_api', __name__)
 users_api = Api(users_bp)
 
 
-def get_user_by_id(user_id):
-    return [u for u in users if u.id == user_id][0]
+def get_user_by_pk(user_pk):
+    return [u for u in users if u.pk == user_pk][0]
 
 
 def jsonify_user(user):
     return {
-        'id': user.id,
+        'pk': user.pk,
         'name': user.name,
     }
 
 
 class User(Resource):
-    def get(self, user_id):
-        user = get_user_by_id(user_id)
+    def get(self, user_pk):
+        user = get_user_by_pk(user_pk)
         return jsonify({
             'following': [jsonify_user(u) for u in user.get_followed_users()]
         })
 
-users_api.add_resource(User, '/users/<string:user_id>')
+users_api.add_resource(User, '/users/<string:user_pk>')
 
 
 class UserList(Resource):
@@ -41,7 +41,7 @@ class UserList(Resource):
     def post(self):
         data = request.get_json()
         user = models.User(
-            id=str(uuid4()),
+            pk=str(uuid4()),
             name=data['name'],
         )
         users.append(user)
@@ -52,12 +52,12 @@ users_api.add_resource(UserList, '/users')
 
 
 class UserFollow(Resource):
-    def post(self, user_id):
+    def post(self, user_pk):
         data = request.get_json()
-        user = get_user_by_id(user_id)
-        user_to_follow = get_user_by_id(data['id'])
+        user = get_user_by_pk(user_pk)
+        user_to_follow = get_user_by_pk(data['pk'])
         user.add_to_followed_users(user_to_follow)
         return {}
 
 
-users_api.add_resource(UserFollow, '/users/<string:user_id>/follow')
+users_api.add_resource(UserFollow, '/users/<string:user_pk>/follow')
