@@ -1,3 +1,4 @@
+from uuid import uuid4
 import pytest
 
 from horse import build_app
@@ -19,12 +20,12 @@ def client(app):
 
 @pytest.fixture
 def user():
-    return User('John')
+    return User(str(uuid4()), 'John')
 
 
 @pytest.fixture
 def followed_user():
-    return User('Andrew')
+    return User(str(uuid4()), 'Andrew')
 
 
 @pytest.fixture
