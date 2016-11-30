@@ -20,15 +20,18 @@ def test_user_registration(client):
 
 
 def test_user_can_follow_another_user(client, users_repo):
-    users_repo.store(User(pk='1', name='Eve'))
-    users_repo.store(User(pk='2', name='Adam'))
+    eve = User(name='Eve')
+    adam = User(name='Adam')
 
-    response = client.post('/users/1/follow', data=json.dumps({
-        'pk': '2',
+    users_repo.store(eve)
+    users_repo.store(adam)
+
+    response = client.post('/users/{}/follow'.format(eve.pk), data=json.dumps({
+        'pk': adam.pk
     }), content_type='application/json')
     assert response.status_code == 200
 
-    response = client.get('/users/1')
+    response = client.get('/users/{}'.format(eve.pk))
     assert response.status_code == 200
 
     followed_users = json.loads(response.data)['followed_users']

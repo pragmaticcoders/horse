@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from flask import Blueprint, request, jsonify, g
 from flask_restful import Api, Resource
 
@@ -41,10 +39,7 @@ class UserList(Resource):
 
     def post(self):
         data = request.get_json()
-        user = models.User(
-            pk=str(uuid4()),
-            name=data['name'],
-        )
+        user = models.User(name=data['name'])
         g.repos.users.store(user)
         return jsonify_user(user), 201
 

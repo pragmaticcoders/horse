@@ -30,12 +30,12 @@ def client(web_app):
 
 @pytest.fixture
 def user():
-    return User(str(uuid4()), 'John')
+    return User('John')
 
 
 @pytest.fixture
 def followed_user():
-    return User(str(uuid4()), 'Andrew')
+    return User('Andrew')
 
 
 @pytest.fixture

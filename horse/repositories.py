@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from horse.models import User
 
 
@@ -20,6 +22,9 @@ class UserRepository:
         return obj
 
     def store(self, obj):
+        assert getattr(obj, 'pk', None) is None
+
+        obj.pk = str(uuid4())
         self.users.append(obj)
 
     def all(self):
