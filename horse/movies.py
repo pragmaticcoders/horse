@@ -11,6 +11,10 @@ movies_bp = Blueprint('movies_api', __name__)
 movies_api = Api(movies_bp)
 
 
+def get_movie_by_pk(movie_pk):
+    return [m for m in movies if m.pk == movie_pk][0]
+
+
 def jsonify_movie(movie):
     return {
         'pk': movie.pk,
