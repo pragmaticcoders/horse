@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, g
 from flask_restful import Api, Resource
 
 from horse import models
-from .movies import get_movie_by_pk, jsonify_movie
+from .movies import jsonify_movie
 
 
 users_bp = Blueprint('users_api', __name__)
@@ -63,7 +63,7 @@ class UserLikesMovie(Resource):
     def post(self, user_pk):
         data = request.get_json()
         user = g.repos.users.get(user_pk)
-        movie = get_movie_by_pk(data['pk'])
+        movie = g.repos.movies.get(data['pk'])
 
         user.add_to_liked_movies(movie)
 

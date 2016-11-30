@@ -1,4 +1,3 @@
-from uuid import uuid4
 import pytest
 
 from horse import build_app
@@ -21,6 +20,11 @@ def users_repo(app):
     return app.ctx.repos.users
 
 
+@pytest.fixture(scope='session')
+def movies_repo(app):
+    return app.ctx.repos.movies
+
+
 @pytest.fixture
 def client(web_app):
     client = web_app.test_client()
@@ -29,15 +33,21 @@ def client(web_app):
 
 
 @pytest.fixture
-def user():
-    return User('John')
+def user(users_repo):
+    user = User('John')
+    users_repo.store(user)
+    return user
 
 
 @pytest.fixture
-def followed_user():
-    return User('Andrew')
+def followed_user(users_repo):
+    user = User('Andrew')
+    users_repo.store(user)
+    return user
 
 
 @pytest.fixture
-def movie():
-    return Movie(str(uuid4()), 'Home alone')
+def movie(movies_repo):
+    movie = Movie('Home alone')
+    movies_repo.store(movie)
+    return movie

@@ -1,4 +1,4 @@
-from horse.repositories import UserRepository
+from horse.repositories import UserRepository, MovieRepository
 from horse.web import build_web_app
 
 
@@ -11,6 +11,7 @@ class App:
 class Repositories:
     def __init__(self):
         self.users = UserRepository()
+        self.movies = MovieRepository()
 
 
 class AppContext:

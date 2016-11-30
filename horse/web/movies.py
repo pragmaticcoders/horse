@@ -1,18 +1,11 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from flask_restful import Api, Resource
-from uuid import uuid4
 
 from horse import models
 
 
-movies = []
-
 movies_bp = Blueprint('movies_api', __name__)
 movies_api = Api(movies_bp)
-
-
-def get_movie_by_pk(movie_pk):
-    return [m for m in movies if m.pk == movie_pk][0]
 
 
 def jsonify_movie(movie):
@@ -25,16 +18,13 @@ def jsonify_movie(movie):
 class Movie(Resource):
     def post(self):
         data = request.get_json()
-        movie = models.Movie(
-            pk=str(uuid4()),
-            title=data['title'],
-        )
-        movies.append(movie)
+        movie = models.Movie(title=data['title'])
+        g.repos.movies.store(movie)
         return jsonify_movie(movie), 201
 
     def get(self):
         return jsonify({
-            'items': [jsonify_movie(m) for m in movies],
+            'items': [jsonify_movie(m) for m in g.repos.movies.all()],
         })
 
 movies_api.add_resource(Movie, '/movies')
