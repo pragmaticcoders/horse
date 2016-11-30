@@ -7,7 +7,7 @@ from horse.models import User
 
 @pytest.fixture(scope='session')
 def app():
-    return build_app()
+    return build_app(debug=True)
 
 
 @pytest.fixture

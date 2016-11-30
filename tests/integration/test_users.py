@@ -1,8 +1,10 @@
 from flask import json
 
+from horse.users import users
+
 
 def test_user_registration(client):
-    response = client.post('/users/register', data=json.dumps({
+    response = client.post('/users', data=json.dumps({
         'name': 'Kevin',
     }), content_type='application/json')
     assert response.status_code == 201
@@ -14,3 +16,24 @@ def test_user_registration(client):
     names = [m['name'] for m in movies]
 
     assert 'Kevin' in names
+
+
+def test_user_can_follow_another_user(client):
+    users.extend([{
+        'id': '1', 'name': 'Eve', 'following': [],
+    }, {
+        'id': '2', 'name': 'Adam', 'following': [],
+    }])
+
+    response = client.post('/users/1/follow', data=json.dumps({
+        'id': '2',
+    }), content_type='application/json')
+    assert response.status_code == 200
+
+    response = client.get('/users/1')
+    assert response.status_code == 200
+
+    following = json.loads(response.data)['following']
+    following_names = [u['name'] for u in following]
+
+    assert 'Adam' in following_names
