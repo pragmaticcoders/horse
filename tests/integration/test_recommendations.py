@@ -1,6 +1,6 @@
 from flask import json
 
-from horse.users import users
+from horse.web.users import users
 
 
 def test_get_recommendations(client, user, followed_user, movie):

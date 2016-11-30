@@ -1,8 +1,8 @@
 from flask import json
 
-from horse.users import users
-from horse.movies import movies
 from horse.models import User
+from horse.web.movies import movies
+from horse.web.users import users
 
 
 def test_user_registration(client):

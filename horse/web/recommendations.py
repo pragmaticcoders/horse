@@ -2,8 +2,7 @@ from flask import Blueprint, jsonify
 from flask_restful import Resource, Api
 
 from horse.recommendation.dummy_service import DummyRecommendationService
-from horse.users import get_user_by_pk
-
+from .users import get_user_by_pk
 
 recommendations_bp = Blueprint('recommendations_api', __name__)
 recommendations_api = Api(recommendations_bp)
