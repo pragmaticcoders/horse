@@ -3,6 +3,7 @@ from flask_restful import Api, Resource
 from uuid import uuid4
 
 from horse import models
+from .movies import get_movie_by_pk, jsonify_movie
 
 
 users = []
@@ -26,7 +27,12 @@ class User(Resource):
     def get(self, user_pk):
         user = get_user_by_pk(user_pk)
         return jsonify({
-            'following': [jsonify_user(u) for u in user.get_followed_users()]
+            'following': [
+                jsonify_user(u) for u in user.get_followed_users()
+            ],
+            'liked_movies': [
+                jsonify_movie(m) for m in user.get_liked_movies()
+            ],
         })
 
 users_api.add_resource(User, '/users/<string:user_pk>')
@@ -61,3 +67,15 @@ class UserFollow(Resource):
 
 
 users_api.add_resource(UserFollow, '/users/<string:user_pk>/follow')
+
+
+class UserLikesMovie(Resource):
+    def post(self, user_pk):
+        data = request.get_json()
+        user = get_user_by_pk(user_pk)
+        movie = get_movie_by_pk(data['pk'])
+
+        user.add_to_liked_movies(movie)
+
+
+users_api.add_resource(UserLikesMovie, '/users/<string:user_pk>/liked_movies')
