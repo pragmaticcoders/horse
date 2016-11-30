@@ -34,10 +34,10 @@ def test_user_can_follow_another_user(client):
     response = client.get('/users/1')
     assert response.status_code == 200
 
-    following = json.loads(response.data)['following']
-    following_names = [u['name'] for u in following]
+    followed_users = json.loads(response.data)['followed_users']
+    followed_users_names = [u['name'] for u in followed_users]
 
-    assert 'Adam' in following_names
+    assert 'Adam' in followed_users_names
 
 
 def test_user_can_like_movie(client, movie, user):
