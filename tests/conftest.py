@@ -11,9 +11,19 @@ def app():
     return build_app(debug=True)
 
 
+@pytest.fixture(scope='session')
+def web_app(app):
+    return app.web_app
+
+
+@pytest.fixture(scope='session')
+def users_repo(app):
+    return app.ctx.repos.users
+
+
 @pytest.fixture
-def client(app):
-    client = app.test_client()
+def client(web_app):
+    client = web_app.test_client()
     client.testing = True
     return client
 
