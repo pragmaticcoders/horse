@@ -7,8 +7,24 @@ horse
 
 Handy Open Recommendation Service
 
-Usage
------
+http://horse-env.pqmnkwtbum.eu-west-1.elasticbeanstalk.com/
+
 
 Installation
 ------------
+
+Python 3.4 is required.
+
+.. code-block::
+
+   $ cd horse
+   $ pip install .
+   $ python application.py
+
+
+Testing
+-------
+
+.. code-block::
+
+   $ tox
