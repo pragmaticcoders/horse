@@ -2,46 +2,42 @@ from flask import Blueprint, request, jsonify, g
 from flask_restful import Api, Resource
 
 from horse import models
-from .movies import jsonify_movie
-
+from horse.web.schemas.user import UserSchema, UserActionSchema
 
 users_bp = Blueprint('users_api', __name__)
 users_api = Api(users_bp)
 
 
-def jsonify_user(user):
-    return {
-        'pk': user.pk,
-        'name': user.name,
-    }
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+user_action_schema = UserActionSchema()
 
 
 class User(Resource):
     def get(self, user_pk):
         user = g.repos.users.get(user_pk)
-        return jsonify({
-            'followed_users': [
-                jsonify_user(u) for u in user.get_followed_users()
-            ],
-            'liked_movies': [
-                jsonify_movie(m) for m in user.get_liked_movies()
-            ],
-        })
+        result = user_schema.dump(user)
+        return jsonify(result.data)
 
 users_api.add_resource(User, '/users/<string:user_pk>')
 
 
 class UserList(Resource):
     def get(self):
+        users = g.repos.users.all()
+        result = users_schema.dump(users)
         return jsonify({
-            'items': [jsonify_user(u) for u in g.repos.users.all()]
+            'items': result.data
         })
 
     def post(self):
-        data = request.get_json()
+        data, errors = user_schema.load(request.get_json())
+        if errors:
+            return {'errors': errors}, 400
         user = models.User(name=data['name'])
         g.repos.users.store(user)
-        return jsonify_user(user), 201
+        result = user_schema.dump(user)
+        return result.data, 201
 
 
 users_api.add_resource(UserList, '/users')
@@ -49,11 +45,12 @@ users_api.add_resource(UserList, '/users')
 
 class UserFollow(Resource):
     def post(self, user_pk):
-        data = request.get_json()
+        data, errors = user_action_schema.load(request.get_json())
+        if errors:
+            return {'errors': errors}, 400
         user = g.repos.users.get(user_pk)
         user_to_follow = g.repos.users.get(data['pk'])
         user.add_to_followed_users(user_to_follow)
-        return {}
 
 
 users_api.add_resource(UserFollow, '/users/<string:user_pk>/follow')

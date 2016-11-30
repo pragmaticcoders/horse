@@ -14,3 +14,10 @@ def test_creating_movie(client):
     titles = [m['title'] for m in movies]
 
     assert 'Home Alone' in titles
+
+
+def test_creating_movie_400_error(client):
+    response = client.post('/movies', data=json.dumps({
+        'wrong_field': 'Home Alone',
+    }), content_type='application/json')
+    assert response.status_code == 400

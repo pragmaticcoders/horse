@@ -18,10 +18,16 @@ def test_user_registration(client):
     assert 'Kevin' in names
 
 
+def test_user_registration_400_error(client):
+    response = client.post('/users', data=json.dumps({
+        'name2': 'Kevin',
+    }), content_type='application/json')
+    assert response.status_code == 400
+
+
 def test_user_can_follow_another_user(client, users_repo):
     eve = User(name='Eve')
     adam = User(name='Adam')
-
     users_repo.store(eve)
     users_repo.store(adam)
 
@@ -37,6 +43,13 @@ def test_user_can_follow_another_user(client, users_repo):
     followed_users_names = [u['name'] for u in followed_users]
 
     assert 'Adam' in followed_users_names
+
+
+def test_user_follow_another_user_400_error(client):
+    response = client.post('/users/1/follow', data=json.dumps({
+        'user_pk': '2',
+    }), content_type='application/json')
+    assert response.status_code == 400
 
 
 def test_user_can_like_movie(client, movie, user, users_repo, movies_repo):
