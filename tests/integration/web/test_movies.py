@@ -11,9 +11,10 @@ def test_creating_movie(client):
     assert response.status_code == 200
 
     movies = json.loads(response.data)['items']
-    titles = [m['title'] for m in movies]
+    movie = movies[0]
 
-    assert 'Home Alone' in titles
+    assert movie['title'] == 'Home Alone'
+    assert movie['likes'] == 0
 
 
 def test_creating_movie_400_error(client):
