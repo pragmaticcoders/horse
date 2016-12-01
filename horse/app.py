@@ -1,3 +1,4 @@
+from horse.recommendation import DummyRecommendationService
 from horse.repositories import UserRepository, MovieRepository
 from horse.web import build_web_app
 
@@ -11,6 +12,12 @@ class App:
 class AppContext:
     def __init__(self):
         self.repos = Repositories()
+        self.recommendations = Recommendations()
+
+
+class Recommendations:
+    def __init__(self):
+        self.dummy = DummyRecommendationService()
 
 
 class Repositories:

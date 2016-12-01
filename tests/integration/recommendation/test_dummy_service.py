@@ -1,4 +1,4 @@
-from horse.recommendation.dummy_service import DummyRecommendationService
+from horse.recommendation import DummyRecommendationService
 
 
 def test_recommendation_for_user_with_one_followed(user, followed_user, movie):

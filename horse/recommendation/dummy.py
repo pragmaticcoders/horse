@@ -1,4 +1,4 @@
-from .service import RecommendationService
+from .base import RecommendationService
 
 
 class DummyRecommendationService(RecommendationService):
