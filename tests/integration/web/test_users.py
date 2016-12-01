@@ -84,6 +84,16 @@ def test_user_can_like_movie(client, movie, user, users_repo, movies_repo):
     assert movie.likes == 1
 
 
+def test_user_can_like_movie_400_error(client, user):
+    url = '/users/{user_pk}/liked_movies'.format(
+        user_pk=user.pk,
+    )
+    response = client.post(
+        url, data=json.dumps({}), content_type='application/json'
+    )
+    assert response.status_code == 400
+
+
 def test_user_can_unlike_movie(client, movie, user, users_repo, movies_repo):
     user.add_to_liked_movies(movie)
 
