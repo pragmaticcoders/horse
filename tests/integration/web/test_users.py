@@ -45,6 +45,20 @@ def test_user_can_follow_another_user(client, users_repo):
     assert 'Adam' in followed_users_names
 
 
+def test_user_can_unfollow_user(client, users_repo):
+    eve = User(name='Eve')
+    adam = User(name='Adam')
+    eve.add_to_followed_users(adam)
+    users_repo.store(eve)
+    users_repo.store(adam)
+
+    response = client.delete(
+        '/users/{}/follow/{}'.format(eve.pk, adam.pk)
+    )
+    assert response.status_code == 204
+    assert len(eve.get_followed_users()) == 0
+
+
 def test_user_follow_another_user_400_error(client):
     response = client.post('/users/1/follow', data=json.dumps({
         'user_pk': '2',
