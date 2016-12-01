@@ -50,3 +50,10 @@ def test_populate(client, populate_feed, users_repo, movies_repo):
     liked_titles = [liked.title for liked in user.get_liked_movies()]
     assert 'Home alone' in liked_titles
     assert 'Shining' in liked_titles
+
+
+def test_populate_400(client):
+    response = client.post(
+        '/populate', data=json.dumps({}), content_type='application/json'
+    )
+    assert response.status_code == 400

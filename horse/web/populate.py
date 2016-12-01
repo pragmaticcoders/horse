@@ -2,6 +2,7 @@ from flask import Blueprint, g, request
 from flask_restful import Resource, Api
 
 from horse import models
+from .schemas.populate import populate_schema
 
 populate_bp = Blueprint('populate_api', __name__)
 populate_api = Api(populate_bp)
@@ -10,7 +11,9 @@ populate_api = Api(populate_bp)
 class Populate(Resource):
     def post(self):
         self._clear_repositories()
-        data = request.get_json()
+        data, errors = populate_schema.load(request.get_json())
+        if errors:
+            return {'errors': errors}, 400
         users_data = data['users']
         movies_data = data['movies']
         self._populate_users(users_data)
