@@ -56,6 +56,7 @@ def test_user_can_like_movie(client, movie, user, users_repo, movies_repo):
     url = '/users/{user_pk}/liked_movies'.format(
         user_pk=user.pk,
     )
+    assert movie.likes == 0
     response = client.post(url, data=json.dumps({
         'pk': movie.pk,
     }), content_type='application/json')
@@ -66,3 +67,4 @@ def test_user_can_like_movie(client, movie, user, users_repo, movies_repo):
     movie_titles = [m['title'] for m in liked_movies]
 
     assert movie.title in movie_titles
+    assert movie.likes == 1
