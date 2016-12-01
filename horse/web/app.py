@@ -18,6 +18,7 @@ def build_web_app(ctx, name=__name__, debug=False):
     @app.before_request
     def before_request():
         g.repos = ctx.repos
+        g.recommendations = ctx.recommendations
 
     app.register_blueprint(movies_bp)
     app.register_blueprint(users_bp)
