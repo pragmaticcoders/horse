@@ -10,10 +10,10 @@ populate_api = Api(populate_bp)
 
 class Populate(Resource):
     def post(self):
-        self._clear_repositories()
         data, errors = populate_schema.load(request.get_json())
         if errors:
             return {'errors': errors}, 400
+        self._clear_repositories()
         users_data = data['users']
         movies_data = data['movies']
         self._populate_users(users_data)
