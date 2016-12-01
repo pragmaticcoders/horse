@@ -8,7 +8,7 @@ def test_get_recommendations(client, user, followed_user, movie, users_repo):
     response = client.get('/users/{}/recommendations'.format(user.pk))
     assert response.status_code == 200
 
-    recommended_movies = json.loads(response.data)['items']
-    titles = [m['title'] for m in recommended_movies]
+    recommendations = json.loads(response.data)['items']
+    titles = [r['movie']['title'] for r in recommendations]
 
     assert movie.title in titles

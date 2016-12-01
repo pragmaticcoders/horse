@@ -8,6 +8,7 @@ def test_recommendation_for_user_with_one_followed(user, followed_user, movie):
 
     service = DummyRecommendationService()
     result = service.recommend(user)
+    result_movies = [recommendation.movie for recommendation in result]
 
     assert len(result) == 1
-    assert movie in result
+    assert movie in result_movies

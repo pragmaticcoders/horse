@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+from horse.models import Recommendation
 from .base import RecommendationService
 
 
@@ -34,7 +35,10 @@ class SmartRecommendationService(RecommendationService):
 
         items = sorted(recommendations.items(), key=lambda i: -i[1])
 
-        return [item[0] for item in items]
+        return [
+            Recommendation(movie=item[0], weight=item[1])
+            for item in items
+        ]
 
     def _get_base_movie_recommendations(self, movies_to_skip):
         all_movies = self.movie_repo.all()
