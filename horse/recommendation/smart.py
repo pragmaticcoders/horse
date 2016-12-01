@@ -1,14 +1,6 @@
 from collections import defaultdict
+
 from .base import RecommendationService
-
-
-class Recommendation:
-    def __init__(self, movie, score):
-        self.movie = movie
-        self.score = score
-
-    def __repr__(self):
-        return 'Recommendation({}, {})'.format(self.movie, self.score)
 
 
 class SmartRecommendationService(RecommendationService):
@@ -18,6 +10,17 @@ class SmartRecommendationService(RecommendationService):
     def __init__(self, user_repo, movie_repo):
         self.user_repo = user_repo
         self.movie_repo = movie_repo
+
+    def recommend(self, user):
+        movies_to_skip = user.get_liked_movies()
+        recommendations = self._get_base_movie_recommendations(movies_to_skip)
+        user_relations = self._get_related_users(user)
+        self._add_relations_scores(
+            movies_to_skip, recommendations, user_relations)
+
+        items = sorted(recommendations.items(), key=lambda i: -i[1])
+
+        return [item[0] for item in items]
 
     def _get_base_movie_recommendations(self, movies_to_skip):
         all_movies = self.movie_repo.all()
@@ -36,10 +39,7 @@ class SmartRecommendationService(RecommendationService):
             if score:
                 movie_scores[movie] = score
 
-        return [
-            Recommendation(movie, score)
-            for (movie, score) in movie_scores.items()
-        ]
+        return movie_scores
 
     def _get_related_users(self, user):
         relations = defaultdict(int)
@@ -81,27 +81,12 @@ class SmartRecommendationService(RecommendationService):
 
         return common_movies_fraction * potential
 
-    def _increase(self, recommendations, movie, score):
-        recommendation = [
-            r for r in recommendations if r.movie.pk == movie.pk
-        ][0]
-        recommendation.score += score
-
-    def recommend(self, user):
-        movies_to_skip = user.get_liked_movies()
-
-        recommendations = self._get_base_movie_recommendations(movies_to_skip)
-        user_relations = self._get_related_users(user)
+    def _add_relations_scores(
+            self, movies_to_skip, recommendations, user_relations):
 
         for related_user, relation_score in user_relations.items():
             for movie in related_user.get_liked_movies():
                 if movie in movies_to_skip:
                     continue
 
-                self._increase(recommendations, movie, relation_score)
-
-        recommendations = sorted(recommendations, key=lambda r: -r.score)
-
-        print([(r.movie.title, r.score) for r in recommendations])
-
-        return [r.movie for r in recommendations]
+                recommendations[movie] += relation_score
