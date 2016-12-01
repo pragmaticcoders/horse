@@ -1,4 +1,5 @@
 from flask import Flask, g
+from flask_cors import CORS
 
 from .movies import movies_bp
 from .recommendations import recommendations_bp
@@ -8,6 +9,7 @@ from .populate import populate_bp
 
 def build_web_app(ctx, name=__name__, debug=False):
     app = Flask(name)
+    CORS(app)
 
     if debug:
         app.debug = debug
