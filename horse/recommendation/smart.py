@@ -11,23 +11,34 @@ class Recommendation:
         return 'Recommendation({}, {})'.format(self.movie, self.score)
 
 
-class Relation:
-    def __init__(self, user, score):
-        self.user = user
-        self.score = score
-
-
 class SmartRecommendationService(RecommendationService):
-    base_potential = 2
+    user_similarity_treshold = 2
+    movie_likes_fraction_exp = 0.5
 
     def __init__(self, user_repo, movie_repo):
         self.user_repo = user_repo
         self.movie_repo = movie_repo
 
     def _get_base_movie_recommendations(self, movies_to_skip):
+        all_movies = self.movie_repo.all()
+        most_likes = max([m.likes for m in all_movies])
+
+        if not most_likes:
+            return []
+
+        def calc_movie_score(movie):
+            return (movie.likes / most_likes) ** self.movie_likes_fraction_exp
+
+        movie_scores = {}
+
+        for movie in set(all_movies) - set(movies_to_skip):
+            score = calc_movie_score(movie)
+            if score:
+                movie_scores[movie] = score
+
         return [
-            Recommendation(movie, 1) for movie in self.movie_repo.all()
-            if movie not in movies_to_skip
+            Recommendation(movie, score)
+            for (movie, score) in movie_scores.items()
         ]
 
     def _get_related_users(self, user):
@@ -65,7 +76,7 @@ class SmartRecommendationService(RecommendationService):
         common_movies_fraction = (
             common_liked_movies_count / max_common_movies_count)
 
-        potential = (max_common_movies_count / self.base_potential)
+        potential = (max_common_movies_count / self.user_similarity_treshold)
         potential = max(min(potential, 2), 0.5)
 
         return common_movies_fraction * potential

@@ -15,3 +15,5 @@ class User:
 
     def add_to_liked_movies(self, movie):
         self._liked_movies.append(movie)
+
+        movie.like_added()

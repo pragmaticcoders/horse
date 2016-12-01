@@ -17,6 +17,7 @@ def assert_recommendations(result, expected):
 
 def test_liked_movie_is_not_included(service, movies_repo):
     user = User('root')
+    other = User('other')
 
     movie_a = Movie('a')
     movie_b = Movie('b')
@@ -25,6 +26,7 @@ def test_liked_movie_is_not_included(service, movies_repo):
     movies_repo.store(movie_b)
 
     user.add_to_liked_movies(movie_a)
+    other.add_to_liked_movies(movie_b)
 
     result = service.recommend(user)
 
@@ -101,3 +103,41 @@ def test_similar_users_are_more_influential(service, movies_repo):
     result = service.recommend(user)
 
     assert_recommendations(result, [movie_b, movie_a])
+
+
+def test_globally_liked_movies_are_more_influential(service, movies_repo):
+    user = User('root')
+
+    movie_a = Movie('a')
+    movie_b = Movie('b')
+    movie_c = Movie('c')
+
+    movies_repo.store(movie_a)
+    movies_repo.store(movie_b)
+    movies_repo.store(movie_c)
+
+    user_a = User('a')
+    user_b = User('b')
+
+    user_a.add_to_liked_movies(movie_a)
+    user_a.add_to_liked_movies(movie_b)
+    user_b.add_to_liked_movies(movie_b)
+
+    result = service.recommend(user)
+
+    assert_recommendations(result, [movie_b, movie_a])
+
+
+def test_movie_without_likes_is_not_recommended(service, movies_repo):
+    user = User('root')
+    movie_a = Movie('a')
+    movie_b = Movie('b')
+
+    movies_repo.store(movie_a)
+    movies_repo.store(movie_b)
+
+    user.add_to_liked_movies(movie_b)
+
+    result = service.recommend(user)
+
+    assert_recommendations(result, [])
