@@ -5,8 +5,8 @@ from horse.models import User, Movie
 
 
 class ObjectDoesNotExist(Exception):
-    def __init__(self, model, pk):
-        super().__init__('{}: {}'.format(model, pk))
+    def __init__(self, model, field):
+        super().__init__('{}: {}'.format(model, field))
 
 
 class Repository(metaclass=ABCMeta):
@@ -41,10 +41,27 @@ class InMemoryRepository(Repository):
     def all(self):
         return self.objects
 
+    def clear(self):
+        self.objects = []
+
 
 class UserRepository(InMemoryRepository):
     model = User
 
+    def get_by_name(self, name):
+        user = next((u for u in self.objects if u.name == name), None)
+        if user is None:
+            raise ObjectDoesNotExist(self.model.__name__, name)
+
+        return user
+
 
 class MovieRepository(InMemoryRepository):
     model = Movie
+
+    def get_by_title(self, title):
+        movie = next((m for m in self.objects if m.title == title), None)
+        if movie is None:
+            raise ObjectDoesNotExist(self.model.__name__, title)
+
+        return movie
