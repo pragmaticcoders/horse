@@ -1,3 +1,4 @@
+from collections import defaultdict
 from .base import RecommendationService
 
 
@@ -27,8 +28,19 @@ class SmartRecommendationService(RecommendationService):
         ]
 
     def _get_related_users(self, user):
-        for user in user.get_followed_users():
-            yield Relation(user, 1)
+        relations = defaultdict(int)
+
+        def recur(root_user, power, depth=0):
+            if depth > 3:
+                return
+
+            for followed in root_user.get_followed_users():
+                relations[followed] += power
+                recur(followed, power / 2, depth + 1)
+
+        recur(user, 1)
+
+        return relations
 
     def _increase(self, recommendations, movie, score):
         recommendation = [
@@ -40,9 +52,9 @@ class SmartRecommendationService(RecommendationService):
         recommendations = self._get_base_movie_recommendations()
         user_relations = self._get_related_users(user)
 
-        for relation in user_relations:
-            for movie in relation.user.get_liked_movies():
-                self._increase(recommendations, movie, relation.score)
+        for related_user, relation_score in user_relations.items():
+            for movie in related_user.get_liked_movies():
+                self._increase(recommendations, movie, relation_score)
 
         recommendations = sorted(recommendations, key=lambda r: -r.score)
 
