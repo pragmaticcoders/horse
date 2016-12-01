@@ -53,7 +53,9 @@ users_api.add_resource(UserFollow, '/users/<string:user_pk>/follow')
 
 class UserLikesMovie(Resource):
     def post(self, user_pk):
-        data = request.get_json()
+        data, errors = user_action_schema.load(request.get_json())
+        if errors:
+            return {'errors': errors}, 400
         user = g.repos.users.get(user_pk)
         movie = g.repos.movies.get(data['pk'])
 
