@@ -1,0 +1,58 @@
+{
+    "users": [
+		{
+			"name": "John",
+			"followed_users": ["Andrew", "Jason"],
+			"liked_movies": ["Home alone"]
+		},
+		{
+			"name": "Andrew",
+			"followed_users": ["Brian"],
+			"liked_movies": ["Shining", "Home alone"]
+		},
+		{
+			"name": "Brian",
+			"followed_users": [],
+			"liked_movies": ["Shining"]
+		},
+		{
+			"name": "Jason",
+			"followed_users": [],
+			"liked_movies": ["Die hard", "Home alone"]
+		},
+		{
+			"name": "Jack",
+			"followed_users": [],
+			"liked_movies": ["Revenant"]
+		},
+		{
+			"name": "Jones",
+			"followed_users": ["Jack"],
+			"liked_movies": ["Die hard"]
+		},
+		{
+			"name": "Richard",
+			"followed_users": ["Leo", "Jonah"],
+			"liked_movies": ["The Great Gatsby"]
+		},
+		{
+			"name": "Leo",
+			"followed_users": [],
+			"liked_movies": ["The Great Gatsby", "Pulp fiction"]
+		},
+		{
+			"name": "Jonah",
+			"followed_users": [],
+			"liked_movies": ["Nocturnal animals"]
+		}
+	],
+	"movies": [
+		{"title": "Home alone"},
+		{"title": "Die hard"},
+		{"title": "Shining"},
+		{"title": "Revenant"},
+		{"title": "The Great Gatsby"},
+		{"title": "Nocturnal animals"},
+		{"title": "Pulp fiction"}
+	]
+}

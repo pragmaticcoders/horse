@@ -37,3 +37,11 @@ Testing
 .. code-block::
 
    $ tox
+
+
+Populate with example dataset
+-------
+
+.. code-block::
+
+   $ curl -X POST http://127.0.0.1:5000/populate -d @./examples/populate.json --header "Content-Type: application/json"
