@@ -7,8 +7,14 @@ horse
 
 Handy Open Recommendation Service
 
-http://horse-env.pqmnkwtbum.eu-west-1.elasticbeanstalk.com/
+Frontend app url:
+   http://test-horse.s3-website-eu-west-1.amazonaws.com/
 
+Backend app url:
+   http://horse-env.pqmnkwtbum.eu-west-1.elasticbeanstalk.com/
+
+Frontend app repository:
+   https://github.com/pragmaticcoders/horse-frontend
 
 Recommendation assumptions
 --------------------------
