@@ -2,15 +2,10 @@ from flask import Blueprint, request, jsonify, g
 from flask_restful import Api, Resource
 
 from horse import models
-from horse.web.schemas.user import UserSchema, UserActionSchema
+from .schemas.user import user_schema, users_schema, user_action_schema
 
 users_bp = Blueprint('users_api', __name__)
 users_api = Api(users_bp)
-
-
-user_schema = UserSchema()
-users_schema = UserSchema(many=True)
-user_action_schema = UserActionSchema()
 
 
 class User(Resource):

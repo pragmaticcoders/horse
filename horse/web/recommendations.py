@@ -1,12 +1,10 @@
 from flask import Blueprint, jsonify, g
 from flask_restful import Resource, Api
 
-from horse.web.schemas.movie import MovieSchema
+from .schemas.movie import movies_schema
 
 recommendations_bp = Blueprint('recommendations_api', __name__)
 recommendations_api = Api(recommendations_bp)
-
-movies_schema = MovieSchema(many=True)
 
 
 class Recommendations(Resource):

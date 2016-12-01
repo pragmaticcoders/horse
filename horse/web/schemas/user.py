@@ -20,3 +20,8 @@ class UserSchema(Schema):
 
 class UserActionSchema(Schema):
     pk = fields.Str(required=True)
+
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+user_action_schema = UserActionSchema()

@@ -2,13 +2,10 @@ from flask import Blueprint, request, jsonify, g
 from flask_restful import Api, Resource
 
 from horse import models
-from .schemas.movie import MovieSchema
+from .schemas.movie import movie_schema, movies_schema
 
 movies_bp = Blueprint('movies_api', __name__)
 movies_api = Api(movies_bp)
-
-movie_schema = MovieSchema()
-movies_schema = MovieSchema(many=True)
 
 
 class Movie(Resource):
