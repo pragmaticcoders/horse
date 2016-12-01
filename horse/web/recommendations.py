@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, g
 from flask_restful import Resource, Api
 
-from .schemas.movie import movies_schema
+from .schemas.recommendation import recommendations_schema
 
 recommendations_bp = Blueprint('recommendations_api', __name__)
 recommendations_api = Api(recommendations_bp)
@@ -10,8 +10,8 @@ recommendations_api = Api(recommendations_bp)
 class Recommendations(Resource):
     def get(self, user_pk):
         user = g.repos.users.get(user_pk)
-        recommended_movies = g.recommendations.smart.recommend(user)
-        result = movies_schema.dump(recommended_movies)
+        recommendations = g.recommendations.smart.recommend(user)
+        result = recommendations_schema.dump(recommendations)
         return jsonify({'items': result.data})
 
 

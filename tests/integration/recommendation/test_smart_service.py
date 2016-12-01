@@ -12,7 +12,9 @@ def assert_recommendations(result, expected):
     def readable(lst):
         return [(item.pk, item.title) for item in lst]
 
-    assert readable(result) == readable(expected)
+    result_movies = [movie for (movie, weight) in result]
+
+    assert readable(result_movies) == readable(expected)
 
 
 def test_liked_movie_is_not_included(service, movies_repo):
