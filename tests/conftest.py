@@ -25,6 +25,12 @@ def movies_repo(app):
     return app.ctx.repos.movies
 
 
+@pytest.fixture(autouse=True)
+def cleanup_data(users_repo, movies_repo):
+    users_repo.clear()
+    movies_repo.clear()
+
+
 @pytest.fixture
 def client(web_app):
     client = web_app.test_client()
