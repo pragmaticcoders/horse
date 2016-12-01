@@ -75,3 +75,17 @@ class UserUnlikesMovie(Resource):
 users_api.add_resource(
     UserUnlikesMovie, '/users/<string:user_pk>/liked_movies/<string:movie_pk>'
 )
+
+
+class UserUnfollow(Resource):
+    def delete(self, user_pk, other_user_pk):
+        user = g.repos.users.get(user_pk)
+        other_user = g.repos.users.get(other_user_pk)
+
+        user.remove_from_followed_users(other_user)
+        return None, 204
+
+
+users_api.add_resource(
+    UserUnfollow, '/users/<string:user_pk>/follow/<string:other_user_pk>'
+)

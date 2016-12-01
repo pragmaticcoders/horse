@@ -23,3 +23,7 @@ class User:
             self._liked_movies.remove(movie)
 
         movie.like_removed()
+
+    def remove_from_followed_users(self, user):
+        if user in self._followed_users:
+            self._followed_users.remove(user)
