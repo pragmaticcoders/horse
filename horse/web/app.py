@@ -3,6 +3,7 @@ from flask import Flask, g
 from .movies import movies_bp
 from .recommendations import recommendations_bp
 from .users import users_bp
+from .populate import populate_bp
 
 
 def build_web_app(ctx, name=__name__, debug=False):
@@ -23,5 +24,6 @@ def build_web_app(ctx, name=__name__, debug=False):
     app.register_blueprint(movies_bp)
     app.register_blueprint(users_bp)
     app.register_blueprint(recommendations_bp)
+    app.register_blueprint(populate_bp)
 
     return app
