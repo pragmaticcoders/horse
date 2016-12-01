@@ -61,3 +61,17 @@ class UserLikesMovie(Resource):
 
 
 users_api.add_resource(UserLikesMovie, '/users/<string:user_pk>/liked_movies')
+
+
+class UserUnlikesMovie(Resource):
+    def delete(self, user_pk, movie_pk):
+        user = g.repos.users.get(user_pk)
+        movie = g.repos.movies.get(movie_pk)
+
+        user.remove_from_liked_movies(movie)
+        return None, 204
+
+
+users_api.add_resource(
+    UserUnlikesMovie, '/users/<string:user_pk>/liked_movies/<string:movie_pk>'
+)

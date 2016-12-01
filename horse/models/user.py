@@ -17,3 +17,9 @@ class User:
         self._liked_movies.append(movie)
 
         movie.like_added()
+
+    def remove_from_liked_movies(self, movie):
+        if movie in self._liked_movies:
+            self._liked_movies.remove(movie)
+
+        movie.like_removed()
