@@ -5,3 +5,7 @@ class Movie:
 
     def like_added(self):
         self.likes += 1
+
+    def like_removed(self):
+        if self.likes > 0:
+            self.likes -= 1

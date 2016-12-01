@@ -68,3 +68,18 @@ def test_user_can_like_movie(client, movie, user, users_repo, movies_repo):
 
     assert movie.title in movie_titles
     assert movie.likes == 1
+
+
+def test_user_can_unlike_movie(client, movie, user, users_repo, movies_repo):
+    user.add_to_liked_movies(movie)
+
+    assert movie in user.get_liked_movies()
+    assert movie.likes == 1
+
+    response = client.delete(
+        '/users/{}/liked_movies/{}'.format(user.pk, movie.pk)
+    )
+    assert response.status_code == 204
+
+    assert len(user.get_liked_movies()) == 0
+    assert movie.likes == 0

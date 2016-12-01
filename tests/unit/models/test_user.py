@@ -16,3 +16,14 @@ def test_adding_movie_to_liked(user, movie):
     liked_movies = user.get_liked_movies()
     assert len(liked_movies) == 1
     assert movie in liked_movies
+
+
+def test_removing_movie_from_liked(user, movie):
+    user.add_to_liked_movies(movie)
+    liked_movies = user.get_liked_movies()
+    assert len(liked_movies) == 1
+    assert movie in liked_movies
+
+    user.remove_from_liked_movies(movie)
+    liked_movies = user.get_liked_movies()
+    assert len(liked_movies) == 0
