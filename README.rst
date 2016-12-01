@@ -10,6 +10,15 @@ Handy Open Recommendation Service
 http://horse-env.pqmnkwtbum.eu-west-1.elasticbeanstalk.com/
 
 
+Recommendation assumptions
+--------------------------
+
+- User movie recommendations are influenced by general movie popularity.
+- Movies liked by followed users are more likely to be recommended. That relation is recursive, but with exponentialy decreasing power.
+- Similarity score between any pair of users can be calculated. It is based on a count of commonly liked movies and is adjusted according to a total number of movies graded by both users.
+- Movie recommendations are influenced by all points above.
+
+
 Installation
 ------------
 

@@ -10,7 +10,7 @@ recommendations_api = Api(recommendations_bp)
 class Recommendations(Resource):
     def get(self, user_pk):
         user = g.repos.users.get(user_pk)
-        recommended_movies = g.recommendations.dummy.recommend(user)
+        recommended_movies = g.recommendations.smart.recommend(user)
         result = movies_schema.dump(recommended_movies)
         return jsonify({'items': result.data})
 

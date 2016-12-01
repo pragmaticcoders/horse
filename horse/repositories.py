@@ -19,6 +19,9 @@ class Repository(metaclass=ABCMeta):
     @abstractmethod
     def all(self): pass
 
+    @abstractmethod
+    def clear(self): pass
+
 
 class InMemoryRepository(Repository):
     def __init__(self):
