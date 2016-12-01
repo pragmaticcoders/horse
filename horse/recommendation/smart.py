@@ -4,12 +4,26 @@ from .base import RecommendationService
 
 
 class SmartRecommendationService(RecommendationService):
-    user_similarity_treshold = 2
-    movie_likes_fraction_exp = 0.5
+    def __init__(self,
+                 user_repo,
+                 movie_repo,
+                 user_common_movies_threshold=2,
+                 movie_likes_fraction_exp=0.5,
+                 max_relation_depth=3,
+                 base_relation_power=1,
+                 relation_level_divisor=2,
+                 max_relationship_significance=2,
+                 min_relationship_significance=0.5):
 
-    def __init__(self, user_repo, movie_repo):
         self.user_repo = user_repo
         self.movie_repo = movie_repo
+        self.user_common_movies_threshold = user_common_movies_threshold
+        self.movie_likes_fraction_exp = movie_likes_fraction_exp
+        self.max_relation_depth = max_relation_depth
+        self.base_relation_power = base_relation_power
+        self.relation_level_divisor = relation_level_divisor
+        self.max_relationship_significance = max_relationship_significance
+        self.min_relationship_significance = min_relationship_significance
 
     def recommend(self, user):
         movies_to_skip = user.get_liked_movies()
@@ -45,14 +59,15 @@ class SmartRecommendationService(RecommendationService):
         relations = defaultdict(int)
 
         def recur(root_user, power, depth=0):
-            if depth > 3:
+            if depth > self.max_relation_depth:
                 return
 
             for followed in root_user.get_followed_users():
                 relations[followed] += power
-                recur(followed, power / 2, depth + 1)
+                next_power = power / self.relation_level_divisor
+                recur(followed, next_power, depth + 1)
 
-        recur(user, 1)
+        recur(user, self.base_relation_power)
 
         for other_user in relations:
             similarity = self._calculate_user_similarity_factor(
@@ -76,10 +91,12 @@ class SmartRecommendationService(RecommendationService):
         common_movies_fraction = (
             common_liked_movies_count / max_common_movies_count)
 
-        potential = (max_common_movies_count / self.user_similarity_treshold)
-        potential = max(min(potential, 2), 0.5)
+        significance = (max_common_movies_count /
+                        self.user_common_movies_threshold)
+        significance = max(significance, self.min_relationship_significance)
+        significance = min(significance, self.max_relationship_significance)
 
-        return common_movies_fraction * potential
+        return common_movies_fraction * significance
 
     def _add_relations_scores(
             self, movies_to_skip, recommendations, user_relations):
